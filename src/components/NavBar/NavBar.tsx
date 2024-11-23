@@ -1,14 +1,17 @@
 // NavBar.tsx
 import React, { useState } from 'react';
 import settingsButton from '../../images/settingsbutton.svg';
-// import CreateUserModal from '../UserLogins/CreateUserModalOLD';
 import CreateUserModal from '../UserLogins/CreateUserModal';
 import './NavBar.css';
+import { useAuth } from '../../context/AuthContext';
+import LoggedInUserInfo from '../LoggedInUserInfo/LoggedInUserInfo';
 
 const NavBar: React.FC = () => {
   const [loginModalOpen, setLoginModalOpen] = useState<boolean>(false);
   const [newUserModalOpen, setNewUserModalOpen] = useState<boolean>(false);
   const [sideMenuActive, setSideMenuActive] = useState<boolean>(false);
+
+  const { userId, email, accessToken, logout } = useAuth();
 
   const handleSideMenuToggle = () => {
     setSideMenuActive(!sideMenuActive);
@@ -64,13 +67,19 @@ const NavBar: React.FC = () => {
 
         {/* Right Side Controls  */}
         <div className="right-controls">
-          <button className="login-btn">Login</button>
-          <button
-            className="create-account-btn"
-            onClick={createAccountModalToggle}
-          >
-            Create Account
-          </button>
+          
+            {accessToken ? (
+            <LoggedInUserInfo/>
+          ) : (
+            // Todo: make these two buttons their own component - login/ create buttons, not super important
+              <><button className="login-btn">Login</button><button
+                className="create-account-btn"
+                onClick={createAccountModalToggle}
+              >
+                Create Account
+              </button></>
+          )}
+          
 
           {/* Settings Button  TODO*/}
           <div className="utility-btn settings-btn">

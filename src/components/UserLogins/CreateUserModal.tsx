@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useAuth } from '../../context/AuthContext';
 
 interface CreateUserModalProps {
   modalToggle: () => void;
@@ -15,6 +16,9 @@ const CreateUserModal: React.FC<CreateUserModalProps> = (
 
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
+  const {setAuth} = useAuth()
+
+  // Send Login Info to Backend
   const handleSubmit = async () => {
     console.log('Username:', username);
     console.log('Password:', password);
@@ -42,6 +46,7 @@ const CreateUserModal: React.FC<CreateUserModalProps> = (
 
       const data = await response.json(); // Parse the response data
       console.log('User created:', data); // Handle the response data (e.g., success message)
+      setAuth(data.userId, email, data.accessToken, username);
       props.modalToggle(); // Close the modal after successful submission
     } catch (error) {
       console.error('Error creating user:', error);
@@ -124,10 +129,10 @@ const CreateUserModal: React.FC<CreateUserModalProps> = (
               />
               <div className="error-message" id="confirmPasswordError"></div>
             </div> */}
-            <button type="submit" className="submit-btn" onClick={handleSubmit}>
+          </form>
+          <button type="submit" className="submit-btn" onClick={handleSubmit}>
               Create Account
             </button>
-          </form>
           {/* TODO: FIX THIS */}
           <div className="login-link">
             Already have an account?
