@@ -16,6 +16,15 @@ code {
     monospace;
 }
 
+.all-pages {
+  padding-top: 90px;
+  padding-left: 185px;
+}
+
+.all-pages-sidebar-closed {
+  padding-top: 90px;
+}
+
 /* TODO: MOVE TO NavBar.css */
 .menu-btn {
   position: absolute;
@@ -781,11 +790,11 @@ z-index: 2;
 width: calc(100% - 50px);
 height: 40px;
 background: rgba(30, 31, 35, 0.9);
-position: relative;
 overflow: hidden;
 margin-bottom: 20px;
 border-radius: 4px;
 margin-left: -20px;
+position: relative;
 }
 
 .ticker {

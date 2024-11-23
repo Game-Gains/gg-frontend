@@ -6,15 +6,19 @@ import './NavBar.css';
 import { useAuth } from '../../context/AuthContext';
 import LoggedInUserInfo from '../LoggedInUserInfo/LoggedInUserInfo';
 
-const NavBar: React.FC = () => {
-  const [loginModalOpen, setLoginModalOpen] = useState<boolean>(false);
+export interface NavBarProps {
+  sideMenuActive: boolean;
+  setSideMenuActive: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const NavBar: React.FC<NavBarProps> = (props: NavBarProps) => {
   const [newUserModalOpen, setNewUserModalOpen] = useState<boolean>(false);
-  const [sideMenuActive, setSideMenuActive] = useState<boolean>(false);
+  // const [sideMenuActive, setSideMenuActive] = useState<boolean>(false);
 
   const { userId, email, accessToken, logout } = useAuth();
 
   const handleSideMenuToggle = () => {
-    setSideMenuActive(!sideMenuActive);
+    props.setSideMenuActive(!props.sideMenuActive);
   };
 
   const createAccountModalToggle = () => {
@@ -48,7 +52,7 @@ const NavBar: React.FC = () => {
           <span></span>
         </div>
         {/* Navigation Tabs  */}
-        <div className={`nav-tabs ${sideMenuActive ? '' : ' hidden'}`}>
+        <div className={`nav-tabs ${props.sideMenuActive ? '' : ' hidden'}`}>
           {/* First group  */}
           <div className="tab-group">
             <div className="tab">TEMP</div>
