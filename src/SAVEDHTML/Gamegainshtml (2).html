@@ -9,56 +9,55 @@
 
     <style>
         body {
-            background: #1c4dde;
             margin: 0;
             padding: 0;
             min-height: 100vh;
             font-family: "Helvetica", sans-serif;
             overflow-x: hidden;
+            box-sizing: border-box;
+            width: 100%;
+            background-color: #181817;
         }
 
         .header {
             position: fixed;
             top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1001;
             width: 100%;
-            height: 90px;
-            background: linear-gradient(
-                to right,
-                #1E1F23 170px,
-                #242528 200px
-            );
-            z-index: 99;
+            background: #1E1F23;
+            padding: 18px 0;
+            display: flex;
+            align-items: center;
+            height: 80px;
+            box-sizing: border-box;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         }
 
         .logo {
-            position: absolute;
-            left: 140px;  /* Moved 30px left from 170px */
-            top: 8px;
-            width: 218px;
-            height: 74px;
-            cursor: pointer;
-            transition: left 0.3s ease;
+            height: 50px;
+            margin-left: 220px; /* Start with larger margin */
+            transition: margin-left 0.3s ease-in-out;
+            display: block;
+            z-index: 1000;
         }
 
-        .logo.shifted {  /* Class for when side tab is hidden */
-            left: 120px;  /* Moves 50px left when shifted */
+        .logo.shifted {
+            margin-left: 60px;
         }
 
         .menu-btn {
-            position: absolute;
-            left: 115px;  /* Increased from 85px to move 30px right */
-            top: 15px;
-            width: 40px;
-            height: 40px;
+            position: absolute; /* Changed to absolute */
+            left: 20px; /* Position from left */
+            z-index: 1002;
             cursor: pointer;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            gap: 6px;
-            padding: 10px;
-            background: #1E1F23;
-            border-radius: 4px;
-            z-index: 100;
+            align-items: center;
+            width: 30px;
+            height: 30px;
         }
 
         .menu-btn span {
@@ -75,81 +74,88 @@
 
         .nav-tabs {
             position: fixed;
+            top: 80px;
             left: 0;
-            top: 90px;
-            width: 170px;  /* Reduced from 265px */
-            height: calc(100vh - 90px);
-            z-index: 98;
-            transform: translateX(0);
-            transition: transform 0.3s ease;
-            background: #1E1F23;
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
+            width: 200px;
+            z-index: 999;
+            transform: translateX(-200px); /* Start hidden */
+            transition: transform 0.3s ease-in-out;
         }
 
         .nav-tabs.hidden {
-            transform: translateX(-185px);  /* Adjusted to match new width + padding */
+            transform: translateX(0); /* Show tab */
+        }
+
+        .nav-tabs.visible {
+            transform: translateX(0);
+            transition: transform 0.3s ease-in-out;
         }
 
         .tab-group {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .tab-group:not(:last-child) {
-            margin-bottom: 30px;
-            padding-bottom: 30px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 8px 12px;
+            margin-bottom: 10px;
         }
 
         .tab {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            color: white;
-            padding: 8px 12px;
+            padding: 10px 15px;
+            margin: 4px 0;
+            border-radius: 6px;
             cursor: pointer;
             transition: all 0.2s ease;
-            font-size: 12px;
-            font-weight: bold;
+            font-size: 13px;
+            color: #808080;
         }
 
         .tab:hover {
-            background-color: #2a2a29;
-            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
         }
 
         .tab:active {
-            background-color: #2a2a29;
-            color: #ffff00;
-            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.15);
+            transform: scale(0.98);
+        }
+
+        .tab.active {
+            background: rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+        }
+
+        .tab span {
+            flex: 1;
+            text-align: left;
         }
 
         .tab-icon {
             width: 16px;
             height: 16px;
             margin-left: 8px;
-            opacity: 0.7;
+            opacity: 0.8;
+            transition: opacity 0.2s ease;
+        }
+
+        .tab:hover .tab-icon {
+            opacity: 1;
         }
 
         main {
+            padding: 104px 20px 20px;
+            width: 100%;
             position: relative;
-            margin-left: 220px;  /* 170px + 50px gap */
-            padding: 20px 30px;
-            width: calc(100% - 280px);
-            transition: all 0.3s ease;
-            height: calc(100vh - 90px);
-            overflow-x: hidden;
-            overflow-y: auto;
-            margin-top: 90px;
             z-index: 1;
+            min-height: 100vh;
+            transition: all 0.3s ease-in-out;
+            box-sizing: border-box;
+            margin: 0 auto;
+            max-width: 1920px;
         }
 
         main.expanded {
-            margin-left: 50px;
-            width: calc(100% - 100px);
+            padding-left: 220px;
+            width: calc(100% - 200px);
         }
 
         .section-title {
@@ -355,6 +361,7 @@
         padding: 0;
         background-color: #181817;
         min-height: 100vh;
+        box-sizing: border-box;
     }
 
     /* Main content adjustments */
@@ -375,16 +382,16 @@
     /* Banner section */
     .banner-section {
         width: 100%;
-        margin: 20px 0;
+        margin: 0;
         padding: 0;
+        position: relative;
+        top: -4px; /* Remove gap below ticker */
     }
 
     .banner-container {
         width: 100%;
         display: flex;
         gap: 12px;
-        height: 140px;
-        margin: 0;
     }
 
     .banner-half {
@@ -396,6 +403,7 @@
         max-width: calc(50% - 6px);
         cursor: pointer;
         transition: all 0.3s ease;
+        aspect-ratio: 16/9;
     }
 
     .banner-image {
@@ -612,77 +620,85 @@
         position: relative;
         width: 100%;
         overflow: hidden;
-        padding: 20px 0;
-        min-height: 160px;
+        padding: 25px 0; /* Increased padding */
+        min-height: 300px; /* Increased container height */
+        background: rgba(24, 24, 23, 0.95); /* Darker background */
+        border-radius: 16px;
+        margin: 20px 0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Added shadow for depth */
     }
 
     .games-row {
         display: flex;
-        gap: 8px;
+        gap: 25px; /* Increased gap */
         transition: transform 0.3s ease;
-        width: 100%;
-        padding: 10px 0;
+        padding: 20px 30px; /* Increased padding */
         position: relative;
+        flex-wrap: nowrap;
     }
 
     .game-card {
-        flex: 0 0 calc((100% - 40px) / 6);  /* Adjusted for 6 cards with gaps */
+        flex: 0 0 calc((100% - (25px * 6)) / 7); /* Adjusted for 7 cards with new gap */
         aspect-ratio: 1;
-        max-width: 130px;
-        height: 130px;
+        max-width: 250px; /* Increased max-width */
+        height: 250px; /* Increased height */
         overflow: hidden;
         position: relative;
-        border-radius: 8px;
+        border-radius: 16px;
         cursor: pointer;
         transition: all 0.3s ease;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4); /* Enhanced shadow */
     }
 
     .game-image {
         width: 100%;
         height: 100%;
-        object-fit: contain;
+        object-fit: cover;
         background: transparent;
+        transition: all 0.3s ease;
     }
 
     .game-card:hover {
-        transform: translateY(-5px);
+        transform: translateY(-8px); /* Increased lift effect */
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
     }
 
     .game-card:hover .game-image {
-        transform: scale(1.05);
+        transform: scale(1.08);
     }
 
     .nav-arrow {
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
-        width: 40px;
-        height: 40px;
+        width: 48px; /* Bigger arrows */
+        height: 48px;
+        background: rgba(24, 24, 23, 0.9);
+        border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        transition: all 0.2s ease;
         z-index: 3;
-        background: rgba(30, 31, 35, 0.8);
-        border-radius: 4px;
+        transition: all 0.2s ease;
     }
 
     .nav-arrow.prev {
-        left: 0;
+        left: 15px;
     }
 
     .nav-arrow.next {
-        right: 20px;  /* Adjusted to be visible over gradient */
+        right: 30px; /* Adjusted to be visible over gradient */
     }
 
     .nav-arrow:hover {
-        background: rgba(30, 31, 35, 1);
+        background: rgba(24, 24, 23, 1);
+        transform: translateY(-50%) scale(1.1);
     }
 
     .arrow-icon {
-        width: 20px;
-        height: 20px;
+        width: 24px; /* Bigger icons */
+        height: 24px;
         fill: white;
     }
 
@@ -696,8 +712,8 @@
     .nav-arrow {
         top: 50%;
         transform: translateY(-50%);
-        width: 40px;
-        height: 40px;
+        width: 48px; /* Bigger arrows */
+        height: 48px;
         z-index: 3;
     }
 
@@ -795,26 +811,51 @@
 
     .language-selector {
         position: relative;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        padding: 8px;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: all 0.2s ease;
+    }
+
+    .language-selector:hover {
+        background: #242528;
+    }
+
+    .language-selector .current-language {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .language-selector .current-language img {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
     }
 
     .language-dropdown {
         position: absolute;
-        top: 100%;
+        top: calc(100% + 5px);
         right: 0;
         background: #1E1F23;
         border-radius: 4px;
         padding: 8px 0;
-        margin-top: 4px;
-        display: none;
+        min-width: 160px;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        display: none;
         z-index: 1000;
+        border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .language-option {
+        display: flex;
+        align-items: center;
+        gap: 8px;
         padding: 8px 16px;
         color: #808080;
-        cursor: pointer;
-        white-space: nowrap;
         transition: all 0.2s ease;
     }
 
@@ -823,8 +864,10 @@
         color: white;
     }
 
-    .language-selector.active .language-dropdown {
-        display: block;
+    .language-option img {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
     }
 
     /* Add these modal styles */
@@ -977,12 +1020,12 @@
         right: 0;
         top: 0;
         height: 100%;
-        width: 100px;
+        width: 150px; /* Increased width of gradient */
         background: linear-gradient(
             to right,
             rgba(24, 24, 23, 0) 0%,
-            rgba(24, 24, 23, 0.9) 70%,
-            rgba(24, 24, 23, 1) 100%
+            rgba(24, 24, 23, 0.95) 70%,
+            rgba(24, 24, 23, 0.95) 100%
         );
         pointer-events: none;
         z-index: 2;
@@ -990,39 +1033,31 @@
 
     /* Add to your existing styles */
     .ticker-wrap {
-        width: calc(100% - 50px);
-        height: 40px;
-        background: rgba(30, 31, 35, 0.9);
-        position: relative;
-        overflow: hidden;
-        margin-bottom: 20px;
-        border-radius: 4px;
-        margin-left: -20px;
+        position: fixed;
+        top: 80px;
+        left: 0;
+        width: 100%;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .ticker-wrap.shifted {
+        left: 200px;
+        width: calc(100% - 200px);
     }
 
     .ticker {
         display: flex;
         white-space: nowrap;
-        animation: ticker 30s linear infinite;
-        align-items: center; /* Center vertically */
-        height: 100%; /* Take full height */
-        padding-top: 3px; /* Adjust text slightly lower */
+        animation: ticker 20s linear infinite;
     }
 
     .ticker-item {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center; /* Center text horizontally */
-        padding: 0 30px;
-        color: #ffffff;
-        font-family: "Poppins", Helvetica;
-        font-weight: 600;
+        display: inline-block;
+        padding: 0 2rem;
+        color: white;
         font-size: 14px;
-        line-height: 40px; /* Match height of container */
-    }
-
-    .ticker-item:nth-child(even) {
-        color: #ffff00;
+        line-height: 1.2;
+        font-weight: 500;
     }
 
     @keyframes ticker {
@@ -1030,7 +1065,7 @@
             transform: translateX(0);
         }
         100% {
-            transform: translateX(-50%);
+            transform: translateX(-100%);
         }
     }
 
@@ -1046,12 +1081,12 @@
         right: 0;
         top: 0;
         height: 100%;
-        width: 100px;
+        width: 150px; /* Increased width of gradient */
         background: linear-gradient(
             to right,
             rgba(24, 24, 23, 0) 0%,
-            rgba(24, 24, 23, 0.9) 70%,
-            rgba(24, 24, 23, 1) 100%
+            rgba(24, 24, 23, 0.95) 70%,
+            rgba(24, 24, 23, 0.95) 100%
         );
         pointer-events: none;
         z-index: 2;
@@ -1062,49 +1097,196 @@
         position: relative;
         width: 100%;
         overflow: hidden;
-        padding: 20px 0;
-        min-height: 160px;
+        padding: 25px 0; /* Increased padding */
+        min-height: 300px; /* Increased container height */
+        background: rgba(24, 24, 23, 0.95); /* Darker background */
+        border-radius: 16px;
+        margin: 20px 0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Container shadow */
     }
 
+    /* Games row styles */
     .games-row {
         display: flex;
-        gap: 8px;
+        gap: 25px; /* Increased gap */
         transition: transform 0.3s ease;
-        width: 100%;
-        padding: 10px 0;
+        padding: 20px 30px; /* Increased padding */
         position: relative;
+        flex-wrap: nowrap;
+        justify-content: center; /* Center the cards */
+        align-items: center; /* Vertical centering */
+        min-height: 280px; /* Ensure consistent height */
     }
 
+    /* Game card styles */
     .game-card {
-        flex: 0 0 calc((100% - 40px) / 6);  /* Adjusted for 6 cards with gaps */
+        flex: 0 0 calc((100% - (25px * 6)) / 7); /* Adjusted for 7 cards */
         aspect-ratio: 1;
-        max-width: 130px;
-        height: 130px;
+        max-width: 250px;
+        height: 250px;
         overflow: hidden;
         position: relative;
         border-radius: 16px;
         cursor: pointer;
         transition: all 0.3s ease;
+        /* Enhanced shadow effects */
+        box-shadow: 
+            0 6px 12px rgba(0, 0, 0, 0.4),
+            0 0 0 1px rgba(255, 255, 255, 0.05),
+            0 1px 3px rgba(0, 0, 0, 0.1);
+        background: rgba(30, 31, 35, 0.6); /* Subtle background */
     }
 
+    /* Game image styles */
     .game-image {
         width: 100%;
         height: 100%;
-        object-fit: contain;
+        object-fit: cover;
         background: transparent;
         transition: all 0.3s ease;
-        border-radius: 16px;
+        filter: brightness(0.95); /* Slightly dim by default */
+    }
+
+    /* Enhanced hover effects */
+    .game-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 
+            0 12px 24px rgba(0, 0, 0, 0.5),
+            0 0 0 1px rgba(255, 255, 255, 0.1),
+            0 2px 6px rgba(0, 0, 0, 0.2);
     }
 
     .game-card:hover .game-image {
-        filter: brightness(0.7);
-        transform: scale(1.05);
+        transform: scale(1.08);
+        filter: brightness(1.1); /* Brighten on hover */
+    }
+
+    /* Container gradient overlays for premium feel */
+    .games-container::before,
+    .games-container::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        height: 100%;
+        width: 150px;
+        pointer-events: none;
+        z-index: 2;
+    }
+
+    .games-container::before {
+        left: 0;
+        background: linear-gradient(
+            to right,
+            rgba(24, 24, 23, 0.95) 0%,
+            rgba(24, 24, 23, 0.95) 30%,
+            rgba(24, 24, 23, 0) 100%
+        );
+    }
+
+    .games-container::after {
+        right: 0;
+        background: linear-gradient(
+            to left,
+            rgba(24, 24, 23, 0.95) 0%,
+            rgba(24, 24, 23, 0.95) 30%,
+            rgba(24, 24, 23, 0) 100%
+        );
+    }
+
+    /* Navigation arrows adjustment */
+    .nav-arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 48px;
+        height: 48px;
+        background: rgba(30, 31, 35, 0.9);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 3;
+        transition: all 0.2s ease;
+        /* Enhanced arrow shadow */
+        box-shadow: 
+            0 4px 8px rgba(0, 0, 0, 0.3),
+            0 0 0 1px rgba(255, 255, 255, 0.05);
+    }
+
+    .nav-arrow.prev {
+        left: 20px;
+    }
+
+    .nav-arrow.next {
+        right: 20px;
+    }
+
+    .nav-arrow:hover {
+        background: rgba(30, 31, 35, 1);
+        transform: translateY(-50%) scale(1.1);
+        box-shadow: 
+            0 6px 12px rgba(0, 0, 0, 0.4),
+            0 0 0 1px rgba(255, 255, 255, 0.1);
+    }
+
+    /* Section title enhancement */
+    .section-header {
+        margin-bottom: 20px;
+        padding: 0 15px;
+    }
+
+    .section-title {
+        color: white;
+        font-size: 24px;
+        font-weight: 700;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Add shadow to text */
+    }
+
+    /* Add hover effects */
+    .game-card:hover {
+        transform: translateY(-8px); /* Increased lift effect */
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+    }
+
+    .game-card:hover .game-image {
+        transform: scale(1.08);
+    }
+
+    /* Section headers */
+    .section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        padding: 0 10px;
+    }
+
+    .section-title {
+        color: white;
+        font-size: 24px;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .view-all-btn {
+        color: #ffff00;
+        font-size: 14px;
+        padding: 6px 12px;
+        border-radius: 20px;
+        background: rgba(255, 255, 0, 0.1);
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .view-all-btn:hover {
+        background: rgba(255, 255, 0, 0.2);
     }
 
     /* Banner section styles */
     .banner-section {
         width: 100%;
-        margin: 20px 0;
+        margin: 0; /* Remove all margins */
         padding: 0;
     }
 
@@ -1112,8 +1294,6 @@
         width: 100%;
         display: flex;
         gap: 12px;
-        height: 140px;
-        margin: 0;
     }
 
     .banner-half {
@@ -1125,6 +1305,7 @@
         max-width: calc(50% - 6px);
         cursor: pointer;
         transition: all 0.3s ease;
+        aspect-ratio: 16/9;
     }
 
     .banner-image {
@@ -1231,10 +1412,337 @@
     }
 
     .form-header .gglogostretchedgg {
-        width: 200px; /* Adjust this value to control logo size */
+        width: 200px;
         height: auto;
         display: block;
-        margin: 0 auto; /* Centers the logo */
+        margin: 0 auto;
+    }
+
+    /* Add these styles to your existing CSS */
+    .game-card.roulette {
+        position: relative;
+        overflow: visible;
+    }
+
+    .roulette-wheel {
+        width: 100%;
+        height: 100%;
+        transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+        transform-origin: center;
+        border-radius: 50%;
+    }
+
+    .roulette-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 10px;
+        border-radius: 16px;
+        z-index: 10;
+    }
+
+    .bet-input {
+        width: 80%;
+        padding: 8px;
+        border: 2px solid #ffff00;
+        background: rgba(30, 31, 35, 0.9);
+        color: white;
+        border-radius: 4px;
+    }
+
+    .spin-btn {
+        padding: 8px 16px;
+        background: #ffff00;
+        color: black;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    /* Updated language selector styles */
+    .language-selector {
+        position: relative;
+        cursor: pointer;
+        z-index: 100;
+    }
+
+    .language-selector svg {
+        width: 16px;
+        height: 16px;
+        fill: #808080;
+        transition: fill 0.2s ease;
+    }
+
+    .language-selector:hover svg {
+        fill: #ffffff;
+    }
+
+    .language-dropdown {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background: #1E1F23;
+        border-radius: 4px;
+        padding: 8px 0;
+        min-width: 120px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(10px);
+        transition: all 0.2s ease;
+        z-index: 101;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .language-selector.active .language-dropdown {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(5px);
+    }
+
+    .language-option {
+        padding: 8px 16px;
+        color: #808080;
+        transition: all 0.2s ease;
+        font-size: 14px;
+        white-space: nowrap;
+        cursor: pointer;
+    }
+
+    .language-option:hover {
+        background: #242528;
+        color: white;
+    }
+
+    /* Remove any conflicting utility-btn styles */
+    .utility-btn.language-selector {
+        width: auto;
+        height: auto;
+        padding: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Update body and main styles */
+    body {
+        margin: 0;
+        padding: 0;
+        background: #181817;
+        color: white;
+        font-family: "Poppins", Helvetica;
+        overflow-x: hidden;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    main {
+        padding: 110px 40px 20px 240px;
+        max-width: 100%;
+        position: relative;
+        z-index: 1;
+        min-height: 100vh;
+        transition: padding 0.3s ease-in-out;
+    }
+
+    /* Ensure content sections are visible */
+    section {
+        position: relative;
+        width: 100%;
+        overflow: visible;
+    }
+
+    /* Update games container */
+    .games-container {
+        position: relative;
+        width: calc(100% - 40px);
+        overflow: hidden;
+        padding: 20px 0;
+        min-height: 160px;
+        margin-left: -20px;
+    }
+
+    .games-row {
+        display: flex;
+        gap: 8px;
+        transition: transform 0.3s ease;
+        width: 100%;
+        padding: 10px 0;
+        position: relative;
+        flex-wrap: nowrap;
+    }
+
+    .game-card {
+        flex: 0 0 calc((100% - 72px) / 10);
+        aspect-ratio: 1;
+        max-width: 130px;
+        height: 130px;
+        overflow: hidden;
+        position: relative;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    /* Fix ticker banner */
+    .ticker-wrap {
+        position: fixed;
+        top: 80px;
+        left: 200px;
+        width: calc(100% - 200px);
+        background: rgba(30, 31, 35, 0.9);
+        z-index: 999;
+        padding: 4px 0;
+        overflow: hidden;
+    }
+
+    .ticker {
+        display: flex;
+        white-space: nowrap;
+        animation: ticker 20s linear infinite;
+    }
+
+    .ticker-item {
+        display: inline-block;
+        padding: 0 2rem;
+        color: white;
+        font-size: 14px;
+        line-height: 1.2;
+        font-weight: 500;
+    }
+
+    @keyframes ticker {
+        0% {
+            transform: translateX(0);
+        }
+        100% {
+            transform: translateX(-100%);
+        }
+    }
+
+    /* Make sure header is positioned correctly */
+    .header {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        width: 100%;
+    }
+
+    /* Ensure banner section starts after ticker */
+    .banner-section {
+        margin-top: 0px;
+    }
+
+    /* Add box shadow to header for better visibility */
+    .header {
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Hide scrollbars but keep functionality */
+    ::-webkit-scrollbar {
+        display: none;
+    }
+
+    * {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+        box-sizing: border-box;
+    }
+
+    /* Adjust ticker when side tab is hidden */
+    .nav-tabs.hidden + .ticker-wrap {
+        left: 0;
+        width: 100%;
+    }
+
+    /* Adjust tab items for smaller width */
+    .tab-group {
+        padding: 5px 12px;
+    }
+
+    .tab {
+        padding: 8px 10px;
+        font-size: 13px;
+    }
+
+    .tab-icon {
+        width: 16px;
+        height: 16px;
+        margin-left: 6px;
+    }
+
+    .side-tab {
+        /* ... existing properties ... */
+        width: 200px;
+        left: 0;
+    }
+
+    .side-tab.extended {
+        width: 200px;
+        margin-right: 50px; /* Ensure no right margin */
+    }
+
+    main {
+        padding: 104px 20px 20px 20px; /* Reduced left padding */
+        margin-left: 100px; /* Reduced margin from 200px to 100px */
+        width: calc(100% - 100px); /* Adjusted width calculation */
+        position: relative;
+        z-index: 1;
+        min-height: 100vh;
+        transition: all 0.3s ease-in-out;
+        box-sizing: border-box;
+    }
+
+    main.expanded {
+        padding-left: 20px;
+        margin-left: 20px !important; /* Added left margin when expanded */
+        width: calc(100% - 240px) !important; /* Adjusted to account for transform */
+        transform: translateX(200px) !important;
+    }
+
+    .game-section-title {
+        padding-left: 220px; /* Add padding to move titles away from side tab */
+        transition: padding 0.3s ease-in-out;
+    }
+
+    .game-section-title.expanded {
+        padding-left: 20px; /* Reset padding when side tab is hidden */
+    }
+
+    .game-preview-container {
+        padding-left: 220px; /* Add padding to move previews away from side tab */
+        transition: padding 0.3s ease-in-out;
+    }
+
+    .game-preview-container.expanded {
+        padding-left: 20px; /* Reset padding when side tab is hidden */
+    }
+
+    /* Initial ticker state (full width) */
+    .ticker-wrap {
+        position: fixed;
+        top: 80px;
+        left: 0;
+        width: 100%;
+        background: rgba(30, 31, 35, 0.9);
+        z-index: 999;
+        padding: 4px 0;
+        overflow: hidden;
+        transition: all 0.3s ease-in-out;
+    }
+
+    /* Ticker state when side tab is visible */
+    .ticker-wrap.shifted {
+        left: 200px;
+        width: calc(100% - 200px);
     }
     </style>
 </head>
@@ -1263,7 +1771,7 @@
             <!-- First group -->
             <div class="tab-group">
                 <div class="tab">
-                    Sports
+                    <span>Sports</span>
                     <img class="tab-icon" src="SPORTSICON2.png" alt="Sports">
                 </div>
                 <div class="tab">
@@ -1284,7 +1792,7 @@
             <div class="tab-group">
                 <div class="tab">
                     Promotion
-                    <img class="tab-icon" src="promo-icon.svg" alt="Promotion">
+                    <img class="tab-icon" src="flamepromo.png" alt="Promotion">
                 </div>
             </div>
 
@@ -1292,15 +1800,15 @@
             <div class="tab-group">
                 <div class="tab">
                     Leaderboards
-                    <img class="tab-icon" src="leaderboard-icon.svg" alt="Leaderboards">
+                    <img class="tab-icon" src="leaderboardlogo.png" alt="Leaderboards">
                 </div>
                 <div class="tab">
                     Live Bet
-                    <img class="tab-icon" src="livebet-icon.svg" alt="Live Bet">
+                    <img class="tab-icon" src="chippng.png" alt="Live Bet">
                 </div>
                 <div class="tab">
                     Buy Crypto
-                    <img class="tab-icon" src="crypto-icon.svg" alt="Buy Crypto">
+                    <img class="tab-icon" src="btclogo.png" alt="Buy Crypto">
                 </div>
             </div>
         </div>
@@ -1323,61 +1831,41 @@
                     <path d="M20,2H4C2.9,2,2,2.9,2,4v18l4-4h14c1.1,0,2-0.9,2-2V4C22,2.9,21.1,2,20,2z M20,16H6l-2,2V4h16V16z"/>
                 </svg>
             </div>
-            
-            <!-- Language Selector -->
-            <div class="utility-btn language-selector">
-                <svg viewBox="0 0 24 24">
-                    <path d="M12.87,15.07l-2.54-2.51l0.03-0.03C11.29,11.46,12,10.02,12,8.5C12,5.91,9.09,3,6.5,3S1,5.91,1,8.5S3.91,14,6.5,14 c1.52,0,2.96-0.71,4.03-1.64l0.03,0.03l2.51,2.54L12.87,15.07z M6.5,12C5.01,12,3,9.99,3,8.5S5.01,5,6.5,5S10,7.01,10,8.5 S7.99,12,6.5,12z"/>
-                </svg>
-                <div class="language-dropdown">
-                    <div class="language-option">English</div>
-                    <div class="language-option">Spanish</div>
-                    <div class="language-option">Chinese</div>
-                    <div class="language-option">Hindi</div>
-                    <div class="language-option">Arabic</div>
-                    <div class="language-option">Portuguese</div>
-                    <div class="language-option">Russian</div>
-                    <div class="language-option">Japanese</div>
-                    <div class="language-option">German</div>
-                    <div class="language-option">French</div>
-                </div>
-            </div>
         </div>
     </header>
 
-    <main>
-        <!-- Ticker Banner -->
-        <div class="ticker-wrap">
-            <div class="ticker">
-                <div class="ticker-item">🔥 TRENDING MEMECOINS:</div>
-                <div class="ticker-item">PEPE +15.2% ($0.000003912)</div>
-                <div class="ticker-item">WOJAK +8.7% ($0.00000891)</div>
-                <div class="ticker-item">BONK +22.4% ($0.00001234)</div>
-                <div class="ticker-item">DOGE +5.6% ($0.12832)</div>
-                <div class="ticker-item">SHIB +10.3% ($0.00002891)</div>
-                <!-- Duplicate items for seamless loop -->
-                <div class="ticker-item">🔥 TRENDING MEMECOINS:</div>
-                <div class="ticker-item">PEPE +15.2% ($0.000003912)</div>
-                <div class="ticker-item">WOJAK +8.7% ($0.00000891)</div>
-                <div class="ticker-item">BONK +22.4% ($0.00001234)</div>
-                <div class="ticker-item">DOGE +5.6% ($0.12832)</div>
-                <div class="ticker-item">SHIB +10.3% ($0.00002891)</div>
-            </div>
+    <div class="ticker-wrap">
+        <div class="ticker">
+            <div class="ticker-item">🔥 TRENDING MEMECOINS:</div>
+            <div class="ticker-item">PEPE +15.2% ($0.000003912)</div>
+            <div class="ticker-item">WOJAK +8.7% ($0.00000891)</div>
+            <div class="ticker-item">BONK +22.4% ($0.00001234)</div>
+            <div class="ticker-item">DOGE +5.6% ($0.12832)</div>
+            <div class="ticker-item">SHIB +10.3% ($0.00002891)</div>
+            <!-- Duplicate items for seamless loop -->
+            <div class="ticker-item">🔥 TRENDING MEMECOINS:</div>
+            <div class="ticker-item">PEPE +15.2% ($0.000003912)</div>
+            <div class="ticker-item">WOJAK +8.7% ($0.00000891)</div>
+            <div class="ticker-item">BONK +22.4% ($0.00001234)</div>
+            <div class="ticker-item">DOGE +5.6% ($0.12832)</div>
+            <div class="ticker-item">SHIB +10.3% ($0.00002891)</div>
         </div>
+    </div>
 
+    <main>
         <!-- Banner Section -->
         <div class="banner-section">
             <div class="banner-container">
                 <div class="banner-half">
-                    <img class="banner-image" src="GGfirstbanner.png" alt="Banner 1">
+                    <img class="banner-image" src="ggbanner.png" alt="Banner 1">
                 </div>
                 <div class="banner-half">
-                    <img class="banner-image" src="GGfirstbanner.png" alt="Banner 2">
+                    <img class="banner-image" src="inviteyourfriends.png" alt="Banner 2">
                 </div>
             </div>
         </div>
 
-        <!-- After banner section and before game sections -->
+        <!-- Category Selector -->
         <div class="category-selector">
             <div class="category-item active">All Games</div>
             <div class="category-item">Slots</div>
@@ -1393,7 +1881,7 @@
             <h2 class="section-title">Popular Games</h2>
             <div class="view-all-btn">View All</div>
         </div>
-        <div class="games-container games-section-popular">
+        <div class="games-container">
             <div class="games-row">
                 <div class="game-card">
                     <img class="game-image" src="sweetbonanzaart.jpg" alt="Sweet Bonanza">
@@ -1419,6 +1907,12 @@
                 <div class="game-card">
                     <img class="game-image" src="gatesofoly.jpg" alt="Gates of Olympus">
                 </div>
+                <div class="game-card">
+                    <img class="game-image" src="sugarrush.jpg" alt="Sugar Rush">
+                </div>
+                <div class="game-card">
+                    <img class="game-image" src="starlightprin.jpg" alt="Starlight Princess">
+                </div>
             </div>
             <div class="nav-arrow prev">
                 <svg class="arrow-icon" viewBox="0 0 24 24">
@@ -1437,26 +1931,48 @@
             <h2 class="section-title">New Games</h2>
             <div class="view-all-btn">View All</div>
         </div>
-        <div class="games-container games-section-new">
+        <div class="games-container">
             <div class="games-row">
                 <div class="game-card">
-                    <img class="game-image" src="https://c.animaapp.com/EtqOPAmu/img/sweet-bonanza@2x.png" alt="Sweet Bonanza">
+                    <img class="game-image" src="sweetbonanzaart.jpg" alt="Sweet Bonanza">
                 </div>
                 <div class="game-card">
-                    <img class="game-image" src="https://c.animaapp.com/EtqOPAmu/img/gates-of-olympus@2x.png" alt="Gates of Olympus">
+                    <img class="game-image" src="gatesofoly.jpg" alt="Gates of Olympus">
                 </div>
                 <div class="game-card">
-                    <img class="game-image" src="https://c.animaapp.com/EtqOPAmu/img/sugar-rush@2x.png" alt="Sugar Rush">
+                    <img class="game-image" src="sugarrush.jpg" alt="Sugar Rush">
                 </div>
                 <div class="game-card">
-                    <img class="game-image" src="https://c.animaapp.com/EtqOPAmu/img/starlight-princess@2x.png" alt="Starlight Princess">
+                    <img class="game-image" src="starlightprin.jpg" alt="Starlight Princess">
                 </div>
                 <div class="game-card">
-                    <img class="game-image" src="https://c.animaapp.com/EtqOPAmu/img/wild-west-gold@2x.png" alt="Wild West Gold">
+                    <img class="game-image" src="wildwestgold.jpg" alt="Wild West Gold">
                 </div>
                 <div class="game-card">
-                    <img class="game-image" src="https://c.animaapp.com/EtqOPAmu/img/fruit-party@2x.png" alt="Fruit Party">
+                    <img class="game-image" src="fruitparty2.jpg" alt="Fruit Party">
                 </div>
+                <div class="game-card">
+                    <img class="game-image" src="sweetbonanzaart.jpg" alt="Sweet Bonanza">
+                </div>
+                <div class="game-card">
+                    <img class="game-image" src="gatesofoly.jpg" alt="Gates of Olympus">
+                </div>
+                <div class="game-card">
+                    <img class="game-image" src="sugarrush.jpg" alt="Sugar Rush">
+                </div>
+                <div class="game-card">
+                    <img class="game-image" src="starlightprin.jpg" alt="Starlight Princess">
+                </div>
+            </div>
+            <div class="nav-arrow prev">
+                <svg class="arrow-icon" viewBox="0 0 24 24">
+                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                </svg>
+            </div>
+            <div class="nav-arrow next">
+                <svg class="arrow-icon" viewBox="0 0 24 24">
+                    <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                </svg>
             </div>
         </div>
 
@@ -1465,26 +1981,36 @@
             <h2 class="section-title">Featured Games</h2>
             <div class="view-all-btn">View All</div>
         </div>
-        <div class="games-container games-section-featured">
+        <div class="games-container">
             <div class="games-row">
                 <div class="game-card">
-                    <img class="game-image" src="https://c.animaapp.com/EtqOPAmu/img/sweet-bonanza@2x.png" alt="Sweet Bonanza">
+                    <img class="game-image" src="sweetbonanzaart.jpg" alt="Sweet Bonanza">
                 </div>
                 <div class="game-card">
-                    <img class="game-image" src="https://c.animaapp.com/EtqOPAmu/img/gates-of-olympus@2x.png" alt="Gates of Olympus">
+                    <img class="game-image" src="gatesofoly.jpg" alt="Gates of Olympus">
                 </div>
                 <div class="game-card">
-                    <img class="game-image" src="https://c.animaapp.com/EtqOPAmu/img/sugar-rush@2x.png" alt="Sugar Rush">
+                    <img class="game-image" src="sugarrush.jpg" alt="Sugar Rush">
                 </div>
                 <div class="game-card">
-                    <img class="game-image" src="https://c.animaapp.com/EtqOPAmu/img/starlight-princess@2x.png" alt="Starlight Princess">
+                    <img class="game-image" src="starlightprin.jpg" alt="Starlight Princess">
                 </div>
                 <div class="game-card">
-                    <img class="game-image" src="https://c.animaapp.com/EtqOPAmu/img/wild-west-gold@2x.png" alt="Wild West Gold">
+                    <img class="game-image" src="wildwestgold.jpg" alt="Wild West Gold">
                 </div>
                 <div class="game-card">
-                    <img class="game-image" src="https://c.animaapp.com/EtqOPAmu/img/fruit-party@2x.png" alt="Fruit Party">
+                    <img class="game-image" src="fruitparty2.jpg" alt="Fruit Party">
                 </div>
+            </div>
+            <div class="nav-arrow prev">
+                <svg class="arrow-icon" viewBox="0 0 24 24">
+                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                </svg>
+            </div>
+            <div class="nav-arrow next">
+                <svg class="arrow-icon" viewBox="0 0 24 24">
+                    <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                </svg>
             </div>
         </div>
 
@@ -1493,42 +2019,91 @@
             <h2 class="section-title">Featured NFTs</h2>
             <div class="view-all-btn">View All</div>
         </div>
-        <div class="nft-grid">
-            <!-- Add your NFT cards here -->
+        <div class="games-container">
+            <div class="games-row">
+                <div class="game-card">
+                    <img class="game-image" src="sweetbonanzaart.jpg" alt="Sweet Bonanza">
+                </div>
+                <div class="game-card">
+                    <img class="game-image" src="gatesofoly.jpg" alt="Gates of Olympus">
+                </div>
+                <div class="game-card">
+                    <img class="game-image" src="sugarrush.jpg" alt="Sugar Rush">
+                </div>
+                <div class="game-card">
+                    <img class="game-image" src="starlightprin.jpg" alt="Starlight Princess">
+                </div>
+                <div class="game-card">
+                    <img class="game-image" src="wildwestgold.jpg" alt="Wild West Gold">
+                </div>
+                <div class="game-card">
+                    <img class="game-image" src="fruitparty2.jpg" alt="Fruit Party">
+                </div>
+            </div>
+            <div class="nav-arrow prev">
+                <svg class="arrow-icon" viewBox="0 0 24 24">
+                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                </svg>
+            </div>
+            <div class="nav-arrow next">
+                <svg class="arrow-icon" viewBox="0 0 24 24">
+                    <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                </svg>
+            </div>
         </div>
 
         <!-- Leaderboard Section -->
-        <div class="section-header">
-            <h2 class="section-title">Top Players</h2>
-            <div class="view-all-btn">View All</div>
-        </div>
-        <div class="leaderboard-container">
-            <div class="leaderboard-header">
-                <div>Rank</div>
-                <div>Player</div>
-                <div>Wager</div>
-                <div>Profit</div>
+        <section>
+            <div class="section-header">
+                <h2 class="section-title">Top Players</h2>
+                <div class="view-all-btn">View All</div>
             </div>
-            <!-- Add your leaderboard rows here -->
-        </div>
+            <div class="leaderboard-container">
+                <div class="leaderboard-header">
+                    <div>Rank</div>
+                    <div>Player</div>
+                    <div>Wager</div>
+                    <div>Profit</div>
+                </div>
+                <div class="leaderboard-row">
+                    <div class="rank">1</div>
+                    <div class="player">Player1</div>
+                    <div class="wager">$10,000</div>
+                    <div class="profit profit-positive">+$5,000</div>
+                </div>
+                <div class="leaderboard-row">
+                    <div class="rank">2</div>
+                    <div class="player">Player2</div>
+                    <div class="wager">$8,000</div>
+                    <div class="profit profit-positive">+$3,000</div>
+                </div>
+                <div class="leaderboard-row">
+                    <div class="rank">3</div>
+                    <div class="player">Player3</div>
+                    <div class="wager">$6,000</div>
+                    <div class="profit profit-negative">-$1,000</div>
+                </div>
+            </div>
+        </section>
     </main>
 
     <script>
         const menuBtn = document.querySelector('.menu-btn');
         const navTabs = document.querySelector('.nav-tabs');
         const mainContent = document.querySelector('main');
-        const categorySelector = document.querySelector('.category-selector');
-        const logo = document.querySelector('.logo');  // Add logo selector
+        const tickerWrap = document.querySelector('.ticker-wrap');
+        const logo = document.querySelector('.logo');
 
         menuBtn.addEventListener('click', () => {
             menuBtn.classList.toggle('active');
             navTabs.classList.toggle('hidden');
             mainContent.classList.toggle('expanded');
-            categorySelector.classList.toggle('expanded');
-            logo.classList.toggle('shifted');  // Toggle logo position
+            logo.classList.toggle('shifted');
+            tickerWrap.classList.toggle('shifted');
             
-            // Force a reflow to ensure smooth transition
-            mainContent.offsetHeight;
+            // Optional: Ensure smooth transition of ticker content
+            const ticker = document.querySelector('.ticker');
+            ticker.style.transition = 'all 0.3s ease-in-out';
         });
 
         function handleBannerClick(bannerNumber) {
@@ -1541,26 +2116,23 @@
             const prevBtn = container.querySelector('.nav-arrow.prev');
             const nextBtn = container.querySelector('.nav-arrow.next');
             let currentPosition = 0;
-            const cardWidth = 138; // card width + gap (130px + 8px)
-            const visibleCards = 6;
+            const cardWidth = 275; // New card width + gap (250px + 25px)
+            const visibleCards = 7;
             
             // Initially hide prev button
             prevBtn.style.display = 'none';
             
-            // Function to update button visibility
             const updateButtons = () => {
                 prevBtn.style.display = currentPosition === 0 ? 'none' : 'flex';
-                nextBtn.style.display = currentPosition >= cardWidth * 6 ? 'none' : 'flex';
+                nextBtn.style.display = currentPosition >= (row.children.length - visibleCards) * cardWidth ? 'none' : 'flex';
             };
             
-            // Next button click handler
             nextBtn.addEventListener('click', () => {
-                currentPosition += cardWidth * visibleCards;
+                currentPosition = Math.min(currentPosition + cardWidth * visibleCards, (row.children.length - visibleCards) * cardWidth);
                 row.style.transform = `translateX(-${currentPosition}px)`;
                 updateButtons();
             });
             
-            // Previous button click handler
             prevBtn.addEventListener('click', () => {
                 currentPosition = Math.max(0, currentPosition - cardWidth * visibleCards);
                 row.style.transform = `translateX(-${currentPosition}px)`;
@@ -1619,7 +2191,7 @@
         <div class="modal-container">
             <div class="modal-close" id="modalClose">
                 <svg viewBox="0 0 24 24">
-                    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12z"/>
+                    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/>
                 </svg>
             </div>
             <div class="form-header">
@@ -1743,5 +2315,116 @@
         });
     </script>
 
+    <script>
+        document.querySelector('.game-card.roulette').addEventListener('click', function(e) {
+            if (!e.target.classList.contains('bet-input') && !e.target.classList.contains('spin-btn')) {
+                this.querySelector('.roulette-overlay').style.display = 'flex';
+            }
+        });
+
+        document.querySelector('.spin-btn').addEventListener('click', function(e) {
+            e.stopPropagation();
+            const betAmount = document.querySelector('.bet-input').value;
+            if (!betAmount || betAmount < 1) {
+                alert('Please enter a valid bet amount');
+                return;
+            }
+
+            const wheel = document.querySelector('.roulette-wheel');
+            const overlay = document.querySelector('.roulette-overlay');
+            const numbers = Array.from({length: 37}, (_, i) => i); // 0-36
+            const result = numbers[Math.floor(Math.random() * numbers.length)];
+            const spins = 5; // Number of full rotations
+            const degreePerNumber = 360 / 37;
+            const finalRotation = (spins * 360) + (result * degreePerNumber);
+
+            wheel.style.transform = `rotate(${finalRotation}deg)`;
+            overlay.style.display = 'none';
+
+            setTimeout(() => {
+                alert(`Result: ${result}\n${result === 0 ? 'House wins!' : result % 2 === 0 ? 'Even!' : 'Odd!'}`);
+                wheel.style.transform = 'rotate(0deg)';
+            }, 4000);
+        });
+
+        // Replace the existing language selector JavaScript
+        document.addEventListener('DOMContentLoaded', function() {
+            const languageSelector = document.getElementById('languageSelector');
+            
+            if (!languageSelector) {
+                console.error('Language selector not found');
+                return;
+            }
+
+            // Toggle dropdown
+            languageSelector.addEventListener('click', function(e) {
+                e.stopPropagation();
+                this.classList.toggle('active');
+            });
+
+            // Handle option selection
+            const languageOptions = languageSelector.querySelectorAll('.language-option');
+            languageOptions.forEach(option => {
+                option.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const lang = this.dataset.lang;
+                    
+                    // Update language
+                    document.documentElement.lang = lang;
+                    
+                    // Close dropdown
+                    languageSelector.classList.remove('active');
+                    
+                    // Log language change (replace with your translation logic)
+                    console.log('Language changed to:', lang);
+                });
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!languageSelector.contains(e.target)) {
+                    languageSelector.classList.remove('active');
+                }
+            });
+        });
+    </script>
+
+    <script>
+        // Add tab click functionality
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs
+                document.querySelectorAll('.tab').forEach(t => {
+                    t.classList.remove('active');
+                });
+                
+                // Add active class to clicked tab
+                tab.classList.add('active');
+                
+                // Get the tab type from the text content
+                const tabType = tab.textContent.trim().toLowerCase();
+                
+                // Handle different tab actions
+                switch(tabType) {
+                    case 'sports':
+                        console.log('Sports section clicked');
+                        // Add your sports section logic
+                        break;
+                    case 'casino':
+                        console.log('Casino section clicked');
+                        // Add your casino section logic
+                        break;
+                    case 'trading':
+                        console.log('Trading section clicked');
+                        // Add your trading section logic
+                        break;
+                    // Add cases for other tabs
+                }
+            });
+        });
+    </script>
+
 </body>
+
+
 </html>
